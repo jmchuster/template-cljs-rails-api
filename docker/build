@@ -1,0 +1,52 @@
+#!/bin/sh
+
+PROJECT_PATH="$( cd "$( dirname $0 )/.." && pwd )"
+source $PROJECT_PATH/docker/vars
+
+# start docker on the mac
+dinghy up --no-proxy
+
+# start db
+if [ $(docker ps -aqf "name=db" | wc -c) -eq 0 ]; then
+  docker run -d --name db \
+    -v "/etc/postgresql" \
+    -v "/var/log/postgresql" \
+    -v "/var/lib/postgresql" \
+    -p 5432:5432 \
+    postgres:9.5.2
+fi
+docker start db
+
+# start redis
+if [ $(docker ps -aqf "name=redis" | wc -c) -eq 0 ]; then
+  docker run -d --name redis \
+    -p 6379:6379 \
+    redis:2.8 \
+    redis-server --appendonly yes
+fi
+docker start redis
+
+# rebuild the image
+docker build -t local/$APP $PROJECT_PATH/docker
+
+# remove the old image
+docker rm -f $APP
+
+# start the new image
+docker run -d --name $APP \
+  -v $PROJECT_PATH:/home/app \
+  -p 80:80 -p 443:443 -p 43210:43210 -p 7888:7888 -p 45678:45678 \
+  --link db:db \
+  --link redis:redis \
+  -e "DATABASE_URL=$DATABASE_URL" \
+  -e "RAILS_RESQUE_REDIS=$RAILS_RESQUE_REDIS" \
+  --dns 208.67.222.222 --dns 208.67.220.220 \
+  local/$APP
+
+# bundle install
+docker exec $APP bash -c "cd api && bundle install"
+
+# fire up bash
+docker exec -it $APP bash -l
+
+# api/server

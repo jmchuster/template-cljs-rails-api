@@ -1,0 +1,4 @@
+#!/bin/sh
+
+source $(dirname $0)/vars
+docker logs -f $APP

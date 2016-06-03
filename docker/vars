@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# the name of the project, which must match up in the following locations
+# the FROM container name in Dockerfile.prod
+# the module name in application.rb
+# the cookie_store key in session_store.rb
+# the active_job queue_name_prefix in production.rb
+APP="my_app"
+
+DATABASE_URL="postgres://postgres@db:5432/$APP"
+TEST_DATABASE_URL="postgres://postgres@db:5432/$APP_test"
+RAILS_RESQUE_REDIS="redis://redis:6379/0"

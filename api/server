@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# kill a previously running puma process, if it exists
+pkill 'ruby2.2'
+
+# run puma on a unix socket
+cd $(dirname $0) && bundle exec puma -b unix:/tmp/sockets/puma.sock

@@ -1,0 +1,8 @@
+/target
+/.nrepl-port
+/.nrepl-history
+/bower_components
+/node_modules
+/out
+/.m2
+/.boot
