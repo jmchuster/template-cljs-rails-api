@@ -1,6 +1,6 @@
 (set-env!
- :source-paths    #{"src/cljs" "css" "semantic"}
- :resource-paths  #{"resources"}
+ :source-paths    #{"src/cljs" "css"}
+ :resource-paths  #{"resources" "semantic/dist"}
  :dependencies '[;; boot dependencies
                  [adzerk/boot-cljs               "1.7.228-1"]
                  [adzerk/boot-cljs-repl          "0.3.0"]
@@ -11,9 +11,9 @@
                  [pandeiro/boot-http             "0.7.3"]
                  [org.slf4j/slf4j-nop            "1.7.21"]
                  [org.clojure/clojurescript      "1.9.14"]
-                 [deraen/boot-less               "0.5.0"] ; (https://github.com/Deraen/less4clj)
                  [deraen/boot-sass               "0.2.1"]
                  [crisptrutski/boot-cljs-test    "0.2.1"]
+                 [me.raynes/conch                "0.8.0"]
                  ;; clojurescript dependencies
                  [reagent                        "0.6.0-alpha2"]
                  [secretary                      "1.2.3"]
@@ -28,27 +28,37 @@
  '[adzerk.boot-reload    :refer [reload]]
  '[pandeiro.boot-http    :refer [serve]]
  '[crisptrutski.boot-cljs-test :refer [test-cljs]]
- '[deraen.boot-less      :refer [less]]
- '[deraen.boot-sass      :refer [sass]])
+ '[deraen.boot-sass      :refer [sass]]
+ '[me.raynes.conch.low-level :as conch])
+
+(defn start-gulp-watch! []
+  (let [gulp (conch/proc "gulp" "watch" "--gulpfile=/home/app/web/semantic/gulpfile.js")]
+    (future (conch/stream-to-out gulp :out))
+    (future (conch/stream-to gulp :err System/err))
+    gulp))
+
+(deftask gulp-watch []
+  (let [gulp (delay (start-gulp-watch!))]
+    (cleanup (conch/destroy @gulp))
+    (with-pass-thru _ @gulp)))
 
 (deftask build []
   (comp (speak)
         (cljs)
-        ; (less)
         (sass)
-        (sift :move {#"^(semantic\.css(?:\.map)?)$" "css/$1"
-                     #"^(main\.css(?:\.map)?)$" "css/$1"})))
+        (sift :move {#"^(main\.css(?:\.map)?)$" "css/$1"})))
 
 (deftask run []
   (comp (serve)
+        (gulp-watch)
         (watch)
         (cljs-repl)
         (reload)
         (build)))
 
+
 (deftask production []
-  (task-options! cljs {:optimizations :advanced}
-                 less {:compression true})
+  (task-options! cljs {:optimizations :advanced})
   identity)
 
 (deftask prod []
@@ -64,8 +74,7 @@
                                          :port 7888}
                             :port        45678
                             :ws-host     "my_app.docker"
-                            :ip          "0.0.0.0"}
-                 less      {:source-map true})
+                            :ip          "0.0.0.0"})
   identity)
 
 (deftask dev

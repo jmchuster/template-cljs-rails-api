@@ -46,6 +46,11 @@ docker run -d --name $APP \
 # bundle install
 docker exec $APP bash -c "cd api && bundle install"
 
+# gulp semantic
+if [ ! -f $PROJECT_PATH/web/semantic/dist/semantic.css ]; then
+  docker exec $APP bash -c "cd web/semantic && gulp build"
+fi
+
 # fire up bash
 docker exec -it $APP bash -l
 

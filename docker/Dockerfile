@@ -51,4 +51,7 @@ ADD my_startup /etc/my_startup
 RUN mkdir -p /tmp/pids
 RUN mkdir -p /tmp/sockets
 
+# add gulp
+RUN npm install -g gulp
+
 WORKDIR /home/app
