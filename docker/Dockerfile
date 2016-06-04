@@ -10,7 +10,7 @@ ENV HOME /root
 # Use baseimage-docker's init process.
 CMD ["/sbin/my_init"]
 
-# Install packages
+# Install APT packages.
 RUN apt-get update
 RUN apt-get -y install openjdk-8-jdk
 
