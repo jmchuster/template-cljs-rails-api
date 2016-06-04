@@ -50,12 +50,11 @@
 
 (deftask run []
   (comp (serve)
-        (gulp-watch)
         (watch)
         (cljs-repl)
         (reload)
-        (build)))
-
+        (build)
+        (gulp-watch)))
 
 (deftask production []
   (task-options! cljs {:optimizations :advanced})

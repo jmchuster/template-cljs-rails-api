@@ -1,9 +1,6 @@
-/target
-/.nrepl-port
-/.nrepl-history
-/bower_components
-/node_modules
 /out
-/.m2
+/target
 /.boot
+/.m2
+/node_modules
 /semantic/dist
