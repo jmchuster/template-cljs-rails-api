@@ -35,13 +35,9 @@ RUN ln -sf /dev/stderr /var/log/nginx/error.log
 # enable nginx
 RUN rm -f /etc/service/nginx/down
 
-# add boot
-ADD bin/boot /usr/local/bin/boot
-ADD bin/lein /usr/local/bin/lein
-
-# boot options
-ENV BOOT_JVM_OPTIONS -Xmx2g -client -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -Xverify:none
-ENV BOOT_HOME /home/app/web/.boot
+# forward request and error logs to docker log collector
+RUN ln -sf /dev/stdout /var/log/nginx/access.log
+RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
 # startup scripts that can be passed to /sbin/my_init -- COMMAND ARGUMENTS...
 # exit 0 if you want to just run it and then shut it down
@@ -51,7 +47,18 @@ ADD my_startup /etc/my_startup
 RUN mkdir -p /tmp/pids
 RUN mkdir -p /tmp/sockets
 
+# add boot
+ADD bin/boot /usr/local/bin/boot
+ADD bin/lein /usr/local/bin/lein
+
+# boot options
+ENV BOOT_JVM_OPTIONS -Xmx2g -client -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -Xverify:none
+ENV BOOT_HOME /home/app/web/.boot
+
 # add gulp
 RUN npm install -g gulp
+
+# set rails environment variables
+ENV RAILS_LOG_TO_STDOUT true
 
 WORKDIR /home/app
