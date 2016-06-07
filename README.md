@@ -70,10 +70,11 @@ To save yourself the effort of having to run `dinghy env` every time you open a 
 
 ### 7. Connect to the cljs REPL
 
-1. Connect to the nREPL at my_app.docker:7888.  This can be done within the container at `cd web && boot repl -c` or an application like atom's proto-repl package.
-2. From the nREPL, execute `(adzerk.boot-cljs-repl/start-repl)`
-3. Refresh the browser
-4. You can now execute code in your nREPL and see it reflected in the browser, such as `(js/alert "Hello world")`
+1. Open up a new terminal tab and connect to the container with `docker/bash`.  Start the repl with `web/repl`.  We'll refer to this terminal tab as the *repl terminal tab*.
+2. From the repl, execute `(start-repl)`.  Your browser javascript console should now say `Opened Websocket REPL connection`.
+3. You can now execute code in your repl and see it reflected in the browser, such as `(js/alert "Hello world")`
+4. Before you exit your repl terminal tab, make sure to close the repl connection with `:cljs/quit`
+5. If you neglect to close the repl connection, the next time you try to `(start-repl)`, it will complain `Address already in use`.  You'll need to run `:cljs/quit`, then `(start-repl)`, and then refresh the browser.
 
 ### 7. Deploy to production
 

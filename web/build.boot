@@ -19,6 +19,7 @@
                  [secretary                      "1.2.3"]
                  [cljsjs/semantic-ui             "2.1.8-0"]
                  [com.andrewmcveigh/cljs-time    "0.4.0"]
+                 [cljs-ajax                      "0.5.5"]
                  ;; bower dependencies
                  [org.webjars.bower/font-awesome "4.6.3"]])
 
