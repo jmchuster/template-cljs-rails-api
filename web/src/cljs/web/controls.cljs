@@ -3,8 +3,8 @@
             [web.session :as session]
             [web.utils :as utils]))
 
-(defn login-user! [user-id]
-  (session/set-user! user-id)
+(defn login-user! [username password]
+  (session/set-user! {:username username :password password})
   (if (= (utils/current_url) "/login") (utils/redirect_url! "/")))
 
 (defn logout-user! []

@@ -1,5 +1,8 @@
 (ns web.pages.home
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [web.session :as session]))
 
 (defn home-page []
-  [:h2.main "Welcome home!"])
+  (if (session/user)
+    [:h2.main "Welcome User " (session/user)]
+    [:h2.main "Welcome Anonymous!"]))
