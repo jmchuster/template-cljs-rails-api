@@ -1,25 +1,19 @@
 (ns web.controls
   (:require [reagent.core :as r]
             [web.session :as session]
-            [web.utils :as utils]
-            [ajax.core :refer [GET POST ajax-request]]))
+            [web.utils :as utils]))
 
 (defn login-user! [username password]
-  (POST "/api/sessions"
-    {:params {:username username
-              :password password}
-     :format :json
-     :response-format :json
-     :keywords? true
-     :handler
-      (fn [response]
-        (.log js/console (str response))
-        (session/set-user! (:data response))
-        (if (= (utils/current_url) "/login") (utils/redirect_url! "/")))
-     :error-handler
-      (fn [{response :response} result]
-        (.log js/console (str response))
-        (js/alert (:detail (nth (:errors response) 0))))}))
+  (utils/post "/api/sessions"
+    {:username username
+     :password password}
+    (fn [ok response]
+      (if ok
+        (do
+          (session/set-user! (:data response))
+          (if (= (utils/current_url) "/login") (utils/redirect_url! "/")))
+        (do
+          (js/alert (utils/error-message response)))))))
 
 (defn logout-user! []
   (session/set-user! nil))
