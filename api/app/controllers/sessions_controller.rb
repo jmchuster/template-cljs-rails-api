@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
         }
       }
     else
+      cookies[:user_token] = nil
       render status: 401, json: {
         errors: [{
           status: "401",
