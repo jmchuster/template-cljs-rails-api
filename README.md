@@ -2,15 +2,13 @@
 
 This is the basic template for a Docker-based ClojureScript frontend with a Rails-API backend, for development on a Mac.
 
-Nginx is responsible for serving the precompiled static js and css assets.  In development mode, `boot` can provide a hot-reload and repl environment.
-
 ## Features
 
 - [Rails-API](https://github.com/rails-api/rails-api) for a lighter, trimmer backend than traditional Rails, running the latest Rails 5 RC1
 - serving and reading JSON requests in the [{json:api}](http://jsonapi.org) style
-- ClojureScript frontend built utilizing [Reagent](https://github.com/reagent-project/reagent) and [Secretary](https://github.com/gf3/secretary)
+- ClojureScript frontend built utilizing [Reagent](https://github.com/reagent-project/reagent), [Secretary](https://github.com/gf3/secretary), and [Semantic UI](http://semantic-ui.com/)
 - watching, building, and hot-reloading (JS, CSS, and HTML) powered by [Boot](https://github.com/boot-clj/boot)
-- static assets and api served via an Nginx reverse proxy without requiring subdomains
+- static assets and api served via an Nginx reverse proxy
 - easily swap between SSL-optional and SSL-required via Nginx
 - [JWT](https://jwt.io/) for stateless authentication and authorization
 - assets, api, and proxy packaged in a single Docker container built on Phusion's [Baseimage-docker](https://github.com/phusion/baseimage-docker)
