@@ -9,7 +9,7 @@
     [:div.ui.container
       [:a.header.item {:href (utils/to_url "/")} "My_App"]
       [:a.item {:href (utils/to_url "/users")} "Users"]
-      [:div.ui.simple.dropdown.item "Account"
+      [:div.ui.simple.dropdown.item.right "Account"
         [:i.dropdown.icon]
         [:div.menu
           [:a.item {:href (utils/to_url "/logout")} "Logout"]]]]])
@@ -18,7 +18,7 @@
   [:div.ui.fixed.inverted.menu
     [:div.ui.container
       [:a.header.item {:href (utils/to_url "/")} "My_App"]
-      [:a.item {:href (utils/to_url "/login")} "Login"]]])
+      [:a.item.right {:href (utils/to_url "/login")} "Login"]]])
 
 (defn header []
   (if (session/user)
