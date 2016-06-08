@@ -4,6 +4,23 @@ This is the basic template for a Docker-based ClojureScript frontend with a Rail
 
 Nginx is responsible for serving the precompiled static js and css assets.  In development mode, `boot` can provide a hot-reload and repl environment.
 
+## Features
+
+- [Rails-API](https://github.com/rails-api/rails-api) for a lighter, trimmer backend than traditional Rails, running the latest Rails 5 RC1
+- serving and reading JSON requests in the [{json:api}](http://jsonapi.org) style
+- ClojureScript frontend built utilizing [Reagent](https://github.com/reagent-project/reagent) and [Secretary](https://github.com/gf3/secretary)
+- watching, building, and hot-reloading (JS, CSS, and HTML) powered by [Boot](https://github.com/boot-clj/boot)
+- static assets and api served via an Nginx reverse proxy without requiring subdomains
+- easily swap between SSL-optional and SSL-required via Nginx
+- [JWT](https://jwt.io/) for stateless authentication and authorization
+- assets, api, and proxy packaged in a single Docker container built on Phusion's [Baseimage-docker](https://github.com/phusion/baseimage-docker)
+- helper scripts for a "one-click" creation of the local Docker environment from scratch, including Postgres and Redis
+- tiered clean reloads, each in < 5s
+  - hot-reload to destroy lexical state
+  - refresh to destroy browser state
+  - restart to destroy server state
+  - rebuild to destroy container state
+
 ## Get started
 
 To get started, you'll need to do the following:
@@ -146,8 +163,8 @@ Because npm likes to aggressively chown, you may need to run these commands from
 
 ### Server restarting and reloading
 
-Once the initial build is cached, the Docker container takes around 5 seconds to rebuild.
+Once cached, the Docker container takes around 5 seconds to rebuild.  Changes to configuration files on the container, such as the nginx server.conf or to the Dockerfile itself will require a container build.  Since all the container's contents are destroyed with each build, we utilize many cache folders that are mapped to local volumes, such as `vendor/bundle`, `.boot`, `.m2`, `semantic/dist`, and `target`.
 
 The rails-api server takes around 5 seconds to start.  Changes to the `app` folder are synchronously loaded with each request.  Changes to the application configuration or to dependencies will require a server restart.
 
-The cljs server takes around 40 seconds to start.  Changes to the `css`, `src`, and `resources` folders are asynchronously loaded with a file watcher.  These changes are compiled and pushed up to the browser via websocket, taking roughly 5 seconds in total.  Changes to the build task or to dependencies will require a server restart.
+The static assets are immediately available upon the container starting, but the hot-reloader takes around 40 seconds to start.  Once started, changes to the `css`, `src`, and `resources` folders are asynchronously loaded via the file watcher.  These changes are compiled and pushed to the nginx static folder as well as up to the browser via websocket for hot-reloading, taking roughly 5 seconds in total.  Changes to the build task or to dependencies will require a hot-reloader restart.
