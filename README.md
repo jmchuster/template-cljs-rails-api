@@ -98,6 +98,12 @@ You can generate a SECRET_KEY_BASE with
     require 'securerandom'
     SecureRandom.hex(64)
 
+The Production container's launch command should be
+
+    /sbin/my_init --sh -c '/etc/my_startup/start_server.sh'
+
+As in development, nginx will launch automatically, while `start_server.sh` will launch the Rails-API server.  There is no need to launch anything for the ClojureScript JS and CSS, as they will be served via nginx as static assets.
+
 ## Other notes
 
 ### SSL
