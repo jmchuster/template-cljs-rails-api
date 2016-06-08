@@ -22,7 +22,7 @@ RUN cd web && npm install
 # cache the m2 packages if there were no changes to build.boot
 ADD web/build.boot web/build.boot
 ADD web/boot.properties web/boot.properties
-RUN cd web && boot
+RUN cd web && boot prod-build
 
 # add the entire project folder to the container
 ADD . /home/app
