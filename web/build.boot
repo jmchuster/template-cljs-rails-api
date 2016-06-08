@@ -61,7 +61,7 @@
   (task-options! cljs {:optimizations :advanced})
   identity)
 
-(deftask prod []
+(deftask prod-build []
   (comp (production)
         (build)))
 
@@ -75,6 +75,10 @@
                             :ws-host     "my_app.docker"
                             :ip          "0.0.0.0"})
   identity)
+
+(deftask dev-build []
+  (comp (development)
+        (build)))
 
 (deftask dev
   "Simple alias to run application in development mode"

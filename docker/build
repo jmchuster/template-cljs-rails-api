@@ -51,6 +51,11 @@ if [ ! -f $PROJECT_PATH/web/semantic/dist/semantic.css ]; then
   docker exec $APP bash -c "cd web/semantic && gulp build"
 fi
 
+# boot dev-build
+if [ ! -f $PROJECT_PATH/web/target/index.html ]; then
+  docker exec $APP bash -c "cd web && boot dev-build"
+fi
+
 # fire up bash
 docker exec -it $APP bash -l
 

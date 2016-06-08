@@ -11,13 +11,26 @@
 FROM local/my_app
 
 # cache the bundle install if there were no changes to Gemfile
-ADD Gemfile Gemfile
-ADD Gemfile.lock Gemfile.lock
-RUN bundle install --without development test --path vendor/bundle --binstubs vendor/bundle/bin --frozen true -j4 --frozen
+ADD api/Gemfile api/Gemfile
+ADD api/Gemfile.lock api/Gemfile.lock
+RUN cd api && bundle install --without development test --path vendor/bundle --binstubs vendor/bundle/bin --frozen true -j4 --frozen
+
+# cache the npm packages if there were no changes to package.json
+ADD web/package.json web/package.json
+RUN cd web && npm install
+
+# cache the m2 packages if there were no changes to build.boot
+ADD web/build.boot web/build.boot
+ADD web/boot.properties web/boot.properties
+RUN cd web && boot
 
 # add the entire project folder to the container
-ADD . /home/app/webapp
+ADD . /home/app
 # bundle install within the container
-RUN bundle install --without development test --path vendor/bundle --binstubs vendor/bundle/bin --frozen true -j4 --frozen
-# precompile assets within the container
-RUN RAILS_ENV=production vendor/bundle/bin/rake assets:precompile
+RUN cd api && bundle install --without development test --path vendor/bundle --binstubs vendor/bundle/bin --frozen true -j4 --frozen
+# install the npm packages
+RUN cd web && npm install
+# build the semantic css
+RUN cd web/semantic && gulp build
+# build the cljs
+RUN cd web && boot prod-build

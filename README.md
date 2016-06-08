@@ -2,7 +2,7 @@
 
 This is the basic template for a Docker-based ClojureScript frontend with a Rails-API backend, for development on a Mac.
 
-In development mode, a jetty server allows for hot-reloading of js and css assets.  In production mode, nginx is responsible for serving the precompiled static js and css assets.
+Nginx is responsible for serving the precompiled static js and css assets.  In development mode, `boot` can provide a hot-reload and repl environment.
 
 ## Get started
 
@@ -40,7 +40,7 @@ To save yourself the effort of having to run `dinghy env` every time you open a 
 2. Build the container with `docker/build`.  This will take a while the very first time as it needs to download the containers' base images, install applications from apt, install rubygems, and build your semantic.css file.  These files are then cached for future builds.
 3. Once `docker/build` completes successfully, it will automatically place you into the container's bash prompt
 4. Start the rails-api server with `api/server`.  We'll refer to this terminal tab as the *rails-api terminal tab*.
-5. Open up a new terminal tab and connect to the container with `docker/bash`.  Start the cljs server with `web/server`.  We'll refer to this terminal tab as the *cljs terminal tab*.
+5. Open up a new terminal tab and connect to the container with `docker/bash`.  Start the cljs hot-reloader with `web/watch`.  We'll refer to this terminal tab as the *cljs terminal tab*.
 6. Visit it at [http://my_app.docker](http://my_app.docker)
 
 ### 4. Restart the rails-api server
@@ -50,11 +50,11 @@ To save yourself the effort of having to run `dinghy env` every time you open a 
 3. Start your rails-api server with `api/server`
 4. Visit it at [http://my_app.docker/api](http://my_app.docker/api)
 
-### 5. Restart the cljs server
+### 5. Restart the cljs hot-reloader
 
 1. Go to your cljs terminal tab
-2. Stop your cljs server with `Ctrl-C`
-3. Start your cljs server with `web/server`
+2. Stop your cljs hot-reloader with `Ctrl-C`. You can still visit the site, but it will not reflect any changes you make to the code.
+3. Start your cljs hot-reloader with `web/watch`
 4. Visit it at [http://my_app.docker](http://my_app.docker)
 
 ### 6. Restart the container
@@ -65,7 +65,7 @@ To save yourself the effort of having to run `dinghy env` every time you open a 
 4. Rebuild the container with `docker/build`
 5. This will terminate the other tab's docker connection.  Connect to the rebuilt container with `docker/bash`.
 6. In one tab, start your rails-api server with `api/server`
-7. In the other tab, start your cljs server with `web/server`
+7. In the other tab, start your cljs server with `web/watch`
 8. Visit it at http://my_app.docker
 
 ### 7. Connect to the cljs REPL

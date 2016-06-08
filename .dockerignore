@@ -1,0 +1,6 @@
+api/vendor/bundle
+web/.boot
+web/.m2
+web/node_modules
+web/out
+web/target
