@@ -4,7 +4,8 @@
             [web.components.header :refer [header]]
             [web.components.footer :refer [footer]]
             [web.session :as session]
-            [web.pages.login :refer [login-page]]))
+            [web.pages.login :refer [login-page]]
+            [web.controls :as controls]))
 
 (defn authenticate-user? [page]
   (:authenticate_user (meta (page))))
@@ -19,5 +20,6 @@
       [footer]]])
 
 (defn init []
+  (controls/refresh-user!)
   (r/render-component [app]
     (.getElementById js/document "container")))

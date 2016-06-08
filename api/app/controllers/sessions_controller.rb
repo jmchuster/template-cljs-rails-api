@@ -1,4 +1,17 @@
 class SessionsController < ApplicationController
+  def show
+    authenticate_user_token!
+    if current_user
+      render status: 200, json: {
+        data: {
+          type: 'user',
+          id: current_user.id,
+          email: current_user.email
+        }
+      }
+    end
+  end
+
   def create
     user = UsersService.user_from_login(params[:email], params[:password])
     if user
@@ -21,6 +34,4 @@ class SessionsController < ApplicationController
       }
     end
   end
-
-  alias index create
 end

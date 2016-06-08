@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get '/api', to: 'api#index'
 
   scope '/api' do
-    resources :sessions
+    resource :session, only: [:show, :create]
     resources :users
   end
 end
