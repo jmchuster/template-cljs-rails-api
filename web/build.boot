@@ -47,11 +47,11 @@
   (comp (speak)
         (cljs)
         (sass)
-        (sift :move {#"^(main\.css(?:\.map)?)$" "css/$1"})))
+        (sift :move {#"^(main\.css(?:\.map)?)$" "css/$1"})
+        (target :dir #{"target"})))
 
 (deftask run []
-  (comp (serve)
-        (watch)
+  (comp (watch)
         (cljs-repl)
         (reload)
         (build)
@@ -63,8 +63,7 @@
 
 (deftask prod []
   (comp (production)
-        (build)
-        (target :dir #{"target"})))
+        (build)))
 
 (deftask development []
   (task-options! cljs      {:optimizations :none :source-map true}
