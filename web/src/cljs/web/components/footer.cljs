@@ -7,4 +7,4 @@
     [:div.ui.center.aligned.container
       [:div.small
         [:i.copyright.icon]
-        [:span (year (now)) " My_App, Inc."]]]])
+        [:span (year (now)) " My_Company, Inc."]]]])
