@@ -17,6 +17,9 @@ RUN apt-get -y install openjdk-8-jdk
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# add gulp
+RUN npm install -g gulp
+
 # write our own nginx.conf
 ADD nginx/nginx.conf /etc/nginx/nginx.conf
 # add environment variables to nginx
@@ -54,9 +57,6 @@ ADD bin/lein /usr/local/bin/lein
 # boot options
 ENV BOOT_JVM_OPTIONS -Xmx2g -client -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -Xverify:none
 ENV BOOT_HOME /home/app/web/.boot
-
-# add gulp
-RUN npm install -g gulp
 
 # set rails environment variables
 ENV RAILS_LOG_TO_STDOUT true
